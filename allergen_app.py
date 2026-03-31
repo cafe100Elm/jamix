@@ -11,7 +11,6 @@ st.markdown("""
     h1, h2, h3 { color: #c25e44 !important; font-family: 'Inter', sans-serif; }
     [data-testid="stSidebar"] { background-color: #f4f1ea !important; }
     
-    /* The 'MenuSync' Terracotta Tag */
     .keyword-tag {
         display: inline-block;
         background-color: #c25e44;
@@ -33,7 +32,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- 2. Logic (Directly from Jeremy's Replit) ---
+# --- 2. Logic (Preserved from Replit) ---
 def clean_ingredients(text):
     if pd.isna(text): return []
     text = re.sub(r'[\(\)\[\]]', '', str(text))
@@ -55,7 +54,6 @@ def detect_allergens(ingredients, allergen_dict):
     for allergen, terms in allergen_dict.items():
         hits = []
         for t in terms:
-            # Jeremy's exclusion logic for Natto/Nuts
             if t == "nut" and ("nutrition" in joined or "chestnut" in joined): continue
             if t == "natto" and "annatto" in joined: continue
             if t in joined: hits.append(t)
@@ -80,13 +78,11 @@ with st.sidebar:
 if not uploaded:
     st.info("Please upload your Excel file to begin.")
 else:
-    # Filter and Sort
     df_display = review_df.copy()
     if search_query:
         df_display = df_display[df_display['nutritive value name'].str.contains(search_query, case=False, na=False)]
     df_display = df_display.sort_values('nutritive value name', ascending=(sort_order == "A-Z"))
 
-    # Display results in the MenuSync Card Style
     for _, row in df_display.iterrows():
         ingredients = clean_ingredients(row.get('ingredients', ''))
         found_allergens = detect_allergens(ingredients, allergen_map)
