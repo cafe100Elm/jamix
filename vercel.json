@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "allergen_app.py",
+      "src": "index.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "allergen_app.py"
+      "dest": "index.py"
     }
   ]
 }
