@@ -1,9 +1,21 @@
 import os
+import shlex
+import subprocess
 import sys
-from streamlit.web.cli import main
 
-# This script redirects Vercel's execution to the Streamlit CLI
+# This is the "handler" Vercel is looking for. 
+# It starts the Streamlit process in the background.
+def handler(event, context):
+    cmd = f"streamlit run allergen_app.py --server.port 8080 --server.headless true"
+    subprocess.Popen(shlex.split(cmd))
+    return {
+        "statusCode": 200,
+        "body": "Streamlit is starting..."
+    }
+
+# This part is for local testing or direct execution
 if __name__ == "__main__":
+    from streamlit.web.cli import main
     sys.argv = [
         "streamlit",
         "run",
@@ -11,4 +23,4 @@ if __name__ == "__main__":
         "--server.port", "8080",
         "--server.address", "0.0.0.0",
     ]
-    sys.exit(main())
+    main()
